@@ -6,4 +6,9 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Poker Range' });
 });
 
+
+/* Game route */
+const game = require('./game');
+router.use('/game', game)
+
 module.exports = router;

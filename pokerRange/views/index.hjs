@@ -14,8 +14,7 @@
 <link rel='stylesheet' href='/stylesheets/main.css'>    
 </head>
 <body>
-	<div class="container-fluid col-sm-8 col-sm-offset-2" ng-controller="ctrl1">
-		<a ui-sref="newGame" ng-click="newGame()">New Game</a>
+	<div class="container-fluid col-sm-8 col-sm-offset-2" ng-controller="container">
 		<div ui-view></div>
 	</div>
 </body>
@@ -29,11 +28,14 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.min.js"></script> 
 
+<!--Tools-->
+<script src="../node_modules/js-combinatorics/combinatorics.js"></script>
 
 <!--Controllers-->
 <script type="text/javascript" src="/javascripts/main.js"></script>
-<script type="text/javascript" src="/javascripts/controller/ctrl1.js"></script> 
+<script type="text/javascript" src="/javascripts/controller/container.js"></script> 
 
+<!--Services-->
 
 <!--Directives-->  
 

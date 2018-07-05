@@ -7,11 +7,11 @@ var app = angular.module('app', ['ui.bootstrap', 'ui.router']);
  	.state('home',{
  		url: '/',
  		templateUrl : '/templates/home.html',
- 		controller: 'ctrl1'
+ 		controller: 'home'
  	})
  	.state('newGame',{
  		url: '/',
  		templateUrl : '/templates/game.html',
- 		controller: 'ctrl1'
+ 		controller: 'game'
  	})
  }]);
