@@ -29,7 +29,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.min.js"></script> 
 
 <!--Tools-->
-<script src="../node_modules/js-combinatorics/combinatorics.js"></script>
+{{!-- <script src="../../node_modules/js-combinatorics/combinatorics.js"></script> --}}
 
 <!--Controllers-->
 <script type="text/javascript" src="/javascripts/main.js"></script>

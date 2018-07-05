@@ -10,7 +10,7 @@ var app = angular.module('app', ['ui.bootstrap', 'ui.router']);
  		controller: 'home'
  	})
  	.state('newGame',{
- 		url: '/',
+ 		url: '/game',
  		templateUrl : '/templates/game.html',
  		controller: 'game'
  	})
