@@ -195,8 +195,8 @@ app.factory('hand', ['card', '$filter', function(card, $filter){
 	}
 
 	var isTopCard = function(){
-		var sortedHand = $filter('orderBy')(this.hand.value);
-		this.handCards.push(sortedHand[4]);
+		var sortedHand = $filter('orderBy')(this.hand.value); // index 0 lowest, index 4 highest
+		this.handCards.push(sortedHand);
 		return true;
 	}
 

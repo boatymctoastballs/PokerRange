@@ -1,5 +1,13 @@
-app.controller('game', ['$scope', 'card', 'hand', function($scope, card, hand){
-    
+app.controller('game', ['$scope', '$rootScope','card', 'hand', function($scope, $rootScope, card, hand){
+    console.log('asdf4');
+    $rootScope.$on('startGameBool', function(event, data) {
+        console.log('asdf5');
+        console.log(data);
+        $scope.newGame();
+      });
+      if ($rootScope.startGameBool){
+        $scope.newGame();
+      }
     var handType = {
         "TOPCARD" : 0,
         "PAIR" : 1,
@@ -21,7 +29,7 @@ app.controller('game', ['$scope', 'card', 'hand', function($scope, card, hand){
     
     var cards = [];
     
-    for (var i = 0; i < 13; i++) {
+    for (var i = 1; i < 14; i++) {
         cards.push(new card(suitType.HEARTS, i));
         cards.push(new card(suitType.SPADES, i));
         cards.push(new card(suitType.DIAMONDS, i));
@@ -151,6 +159,7 @@ app.controller('game', ['$scope', 'card', 'hand', function($scope, card, hand){
     }
     
     $scope.newGame = function(){
+        console.log('newGame in game controller.')
         $scope.deck = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
         $scope.trash = [];
         $scope.flop = [];
