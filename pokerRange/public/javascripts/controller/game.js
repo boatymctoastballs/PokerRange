@@ -2,6 +2,18 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
 
     //https://deckofcardsapi.com/ 
       $scope.init = function(){
+          $scope.startGame();  
+        // $scope.deck = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
+        // $scope.trash = [];
+        // $scope.flop = [];
+        // $scope.turn = "";
+        // $scope.river = "";
+        // $scope.enemies = [];
+        // randomGame();
+        // console.log($scope.board);
+    }
+
+    $scope.startGame = function(){
         $scope.board = [];
         $scope.flop = [];
         $scope.turn = {};
@@ -11,26 +23,13 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
         $http.get('https://deckofcardsapi.com/api/deck/new/')
             .then(function(res){
                 $scope.deck_id = res.data.deck_id;
-                $http.get('https://deckofcardsapi.com/api/deck/' + res.data.deck_id + '/shuffle/?deck_count=1')
+                $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/shuffle/?deck_count=1')
                     .then(function(res){
                         $scope.shuffled = res.data.shuffled;
+                        randomGame();
                     });
-                randomGame();
+                
             });
-        
-        
-        
-        
-        
-        
-        // $scope.deck = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
-        // $scope.trash = [];
-        // $scope.flop = [];
-        // $scope.turn = "";
-        // $scope.river = "";
-        // $scope.enemies = [];
-        // randomGame();
-        // console.log($scope.board);
     }
 
 
@@ -147,8 +146,33 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
     //     $scope.board.push(card);
     //     return card
     // }
-    
-    
+    $scope.newCardType = '';
+    $scope.newCard = function(){
+        let gameType = $scope.board.length;
+        switch(gameType){
+            case 3:
+                $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + 1)
+                .then(function(res){
+                    console.log(res.data.cards);
+                    $scope.gameCards.push(res.data.cards);
+                    $scope.board.push(res.data.cards);
+                    $scope.turn = res.data.cards;
+                    $scope.newCardType = 'River';
+                });
+                break;
+            case 4:
+                $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + 1)
+                .then(function(res){
+                    console.log(res.data.cards);
+                    $scope.gameCards.push(res.data.cards);
+                    $scope.board.push(res.data.cards);
+                    $scope.river = res.data.cards;
+                });
+                break;  
+        }
+    }
+
+
     var flopGame = function(rndEnemies){
         $scope.board = $scope.gameCards.slice(0,3);
         $scope.flop = $scope.gameCards.slice(0,3);        
@@ -192,12 +216,14 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
             $scope.gameCards = res.data.cards;
             switch(rndIndex){
                 case 0:
+                    $scope.newCardType = 'Turn';
                     flopGame(rndEnemies);
                     break;
                 case 1: 
+                    $scope.newCardType = 'River';
                     turnGame(rndEnemies);
                     break;
-                case 2:
+                case 2:                    
                     riverGame(rndEnemies);	
                     break;
                 break;

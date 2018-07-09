@@ -1,6 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color:  #003300;
 }
 
 a {
@@ -8,5 +9,23 @@ a {
 }
 
 .boardCard{
+  float: left;
+  margin-top: 100px;
   margin-right: 5px;
+  margin-bottom: 100px;
+}
+
+
+#board{
+  width: 337.5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#hand{
+  width: 137px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
