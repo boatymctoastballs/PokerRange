@@ -1,4 +1,2 @@
-app.controller('container', ['$scope', 'card', 'hand', function($scope, card, hand){
-
-
+app.controller('container', ['$scope', '$rootScope', 'card', 'hand', function($scope, $rootScope, card, hand){
 }]);

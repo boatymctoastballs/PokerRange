@@ -1,4 +1,4 @@
-.factory('range', [ 'card', 'hand', function(card, hand){
+app.factory('range', [ 'card', 'hand', function(card, hand){
 
 	this.holding;
 	this.board;

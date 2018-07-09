@@ -1,19 +1,5 @@
 app.factory('hand', ['card', '$filter', function(card, $filter){
 
-// how recude works:
-	// people = [
- //    {name: 'Mary', gender: 'girl'},
- //    {name: 'Paul', gender: 'boy'},
- //    {name: 'John', gender: 'boy'},
- //    {name: 'Lisa', gender: 'girl'},
- //    {name: 'Bill', gender: 'boy'},
- //    {name: 'Maklatura', gender: 'girl'}
-	// ]
-
-	// var numBoys = people.reduce(function (n, person) {
-	//     return n + (person.gender == 'boy');
-	// }, 0);
-
 	//Enum kind of
 	var handType = {
 	"TOPCARD" : 0,
@@ -99,18 +85,18 @@ app.factory('hand', ['card', '$filter', function(card, $filter){
 		}
 		if(card1.count==4){
 			this.handCards = [
-			new card(suitType.HEARTS, card1.value), 
-			new card(suitType.SPADES, card1.value),
-			new card(suitType.DIAMONDS, card1.value),
-			new card(suitType.CLUBS, card1.value)
+			new card('HEARTS', card1.value), 
+			new card('SPADES', card1.value),
+			new card('DIAMONDS', card1.value),
+			new card('CLUBS', card1.value)
 			];
 		}
 		else if(card2.count==4){
 			this.handCards = [
-			new card(suitType.HEARTS, card2.value), 
-			new card(suitType.SPADES, card2.value),
-			new card(suitType.DIAMONDS, card2.value),
-			new card(suitType.CLUBS, card2.value)
+			new card('HEARTS', card2.value), 
+			new card('SPADES', card2.value),
+			new card('DIAMONDS', card2.value),
+			new card('CLUBS', card2.value)
 			];
 		}
 		return card1.count==4 || card2.count==4		

@@ -1,1 +1,20 @@
-<div>Game</div>
+<div ng-init="init()"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs" ng-repeat="card in board">
+            <img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{card.images.png}}">
+        </div>
+    </div>
+</div>
+
+</br></br></br></br></br></br></br></br></br>
+
+<img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{holding[0].images.png}}">
+<img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{holding[1].images.png}}">
+</br></br></br></br></br></br></br></br></br>
+
+Board: {{board}}</br>
+flop: {{flop}}</br>
+turn: {{turn}}</br>
+river: {{river}}</br>
+holding: {{holding}} </br>

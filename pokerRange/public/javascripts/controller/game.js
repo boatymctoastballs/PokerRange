@@ -1,55 +1,81 @@
-app.controller('game', ['$scope', '$rootScope','card', 'hand', function($scope, $rootScope, card, hand){
-    console.log('asdf4');
-    $rootScope.$on('startGameBool', function(event, data) {
-        console.log('asdf5');
-        console.log(data);
-        $scope.newGame();
-      });
-      if ($rootScope.startGameBool){
-        $scope.newGame();
-      }
-    var handType = {
-        "TOPCARD" : 0,
-        "PAIR" : 1,
-        "TWOPAIR" : 2,
-        "SET" : 3,
-        "STRAIGHT" : 4,
-        "FULLHOUSE" : 5,
-        "FLUSH" : 6,
-        "QUADS" : 7,
-        "STRAIGHTFLUSH" : 8
+app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', function($scope, $rootScope, $http, card, hand){
+
+    //https://deckofcardsapi.com/ 
+      $scope.init = function(){
+        $scope.board = [];
+        $scope.flop = [];
+        $scope.turn = {};
+        $scope.river = {};
+        $scope.holding = []; //2 cards
+        $scope.gameCards = [];
+        $http.get('https://deckofcardsapi.com/api/deck/new/')
+            .then(function(res){
+                $scope.deck_id = res.data.deck_id;
+                $http.get('https://deckofcardsapi.com/api/deck/' + res.data.deck_id + '/shuffle/?deck_count=1')
+                    .then(function(res){
+                        $scope.shuffled = res.data.shuffled;
+                    });
+                randomGame();
+            });
+        
+        
+        
+        
+        
+        
+        // $scope.deck = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
+        // $scope.trash = [];
+        // $scope.flop = [];
+        // $scope.turn = "";
+        // $scope.river = "";
+        // $scope.enemies = [];
+        // randomGame();
+        // console.log($scope.board);
     }
+
+
+    // var handType = {
+    //     "TOPCARD" : 0,
+    //     "PAIR" : 1,
+    //     "TWOPAIR" : 2,
+    //     "SET" : 3,
+    //     "STRAIGHT" : 4,
+    //     "FULLHOUSE" : 5,
+    //     "FLUSH" : 6,
+    //     "QUADS" : 7,
+    //     "STRAIGHTFLUSH" : 8
+    // }
     
-    var suitType = {
-        "HEARTS" : 0,
-        "SPADES" : 1,
-        "DIAMONDS" : 2,
-        "CLUBS" : 3
-    }
+    // var suitType = {
+    //     "HEARTS" : 0,
+    //     "SPADES" : 1,
+    //     "DIAMONDS" : 2,
+    //     "CLUBS" : 3
+    // }
     
-    var cards = [];
+    // var cards = [];    
+    // for (var i = 1; i < 14; i++) {
+    //     cards.push(new card('HEARTS', i));
+    //     cards.push(new card('SPADES', i));
+    //     cards.push(new card('DIAMONDS', i));
+    //     cards.push(new card('CLUBS', i));
+    // }
     
-    for (var i = 1; i < 14; i++) {
-        cards.push(new card(suitType.HEARTS, i));
-        cards.push(new card(suitType.SPADES, i));
-        cards.push(new card(suitType.DIAMONDS, i));
-        cards.push(new card(suitType.CLUBS, i));
-    }
+
     
-    $scope.deck = [];
-    $scope.trash = [];
+
+    // $scope.deck = [];
+    // $scope.trash = [];
     
-    $scope.board = [];
-    $scope.turn = "";
-    $scope.river = "";
+
     
-    $scope.enemyHoldings = [];
-    $scope.holding = []; //2 cards
+    // $scope.enemyHoldings = [];
+    // $scope.holding = []; //2 cards
     
-    $scope.range = [];
-    $scope.enemyRange = [];
+    // $scope.range = [];
+    // $scope.enemyRange = [];
     
-    var calcRange = function(){
+   // var calcRange = function(){
         //all possible hands - useless hands = (a pair or more)
         //all possible kombinations of hands from the 2 cards you are holding, the board and the rest of the cards in the deck:
         //2 holding + 1 boardCards + 2 dCards (flop state - 1 boardCards of 3)
@@ -76,97 +102,112 @@ app.controller('game', ['$scope', '$rootScope','card', 'hand', function($scope, 
         //holding + 3 boardCards 
         //
     
-    }
+    // }
     
-    var drawCard = function(){
-        var deckIndex = Math.floor(Math.random()*($scope.deck.length-1)+1);
-        var index = $scope.deck[deckIndex];
-        $scope.deck.splice(deckIndex,1);	
-        return cards[index];
-    }
+    // var drawCard = function(){
+    //     var deckIndex = Math.floor(Math.random()*($scope.deck.length-1)+1); // +1 ?
+    //     var index = $scope.deck[deckIndex];
+    //     $scope.deck.splice(deckIndex,1);	
+    //     return cards[index];
+    // }
     
     
-    var doFlop = function(){
-        for (var i = 0; i < 3; i++) {
-        var index = Math.floor(Math.random()*($scope.deck.length-1)+1);
-        $scope.board.push(cards[index]);
-        $scope.deck.splice(index,1);
-        }
-    }
+    // var doFlop = function(){
+        // for (var i = 0; i < 3; i++) {
+        //     let card = drawCard();
+        // }       
+    // }
     
     //makes a hand(c1,c2,null,null,null)
-    var makeHands = function(amountOfEnemies){
-        for (var i = 0; i<amountOfEnemies+1; i++) {
-            var enemy = {};
-            var tempHolding = [];
-            for(var j = 0; j<2; j++){
-                tempHolding.push(drawCard());
-            }		
-            if(i==0){
-                $scope.holding = tempHolding;
-            }
-            else{
-                enemy[i] = tempHolding;
-                $scope.enemyHoldings.push(enemy);	
-            }
+    // var makeHands = function(amountOfEnemies){
+    //     for (var i = 0; i<amountOfEnemies+1; i++) {
+
             
-        }
-    }
+
+
+            // var enemy = {};
+            // var tempHolding = [];
+            // for(var j = 0; j<2; j++){
+            //     tempHolding.push(drawCard());
+            // }		
+            // if(i==0){
+            //     $scope.holding = tempHolding;
+            // }
+            // else{
+            //     enemy[i] = tempHolding;
+            //     $scope.enemyHoldings.push(enemy);	
+            // }
+            
+    //     }
+    // }
     
     
-    var addCardToBoard = function(){
-        $scope.board.push(drawCard());
-    }
+    // var addCardToBoard = function(){
+    //     let card = drawCard();
+    //     $scope.board.push(card);
+    //     return card
+    // }
     
     
     var flopGame = function(rndEnemies){
-        makeHands(rndEnemies);
-        doFlop();	
+        $scope.board = $scope.gameCards.slice(0,3);
+        $scope.flop = $scope.gameCards.slice(0,3);        
+        $scope.holding = $scope.gameCards.slice(3,5);
+        //makeHands(rndEnemies);
+        // doFlop();	
     }
     
-    var turnGame = function(rndEnemies){
-        makeHands(rndEnemies);
-        doFlop();
-        addCardToBoard();
-    }
+     var turnGame = function(rndEnemies){
+        $scope.board = $scope.gameCards.slice(0,4);
+        $scope.flop = $scope.gameCards.slice(0,3);
+        $scope.turn = $scope.gameCards[3];
+        $scope.holding = $scope.gameCards.slice(4,6);
+    //     makeHands(rndEnemies);
+    //     doFlop();
+    //     $scope.turn = addCardToBoard();
+     }
     
-    var riverGame = function(rndEnemies){
-        makeHands(rndEnemies);
-        doFlop();
-        addCardToBoard();
-        addCardToBoard();
+     var riverGame = function(rndEnemies){
+        $scope.board = $scope.gameCards.slice(0,5);
+        $scope.flop = $scope.gameCards.slice(0,3);
+        $scope.turn = $scope.gameCards[3];
+        $scope.river = $scope.gameCards[4];
+        $scope.holding = $scope.gameCards.slice(5,7);
+    //     makeHands(rndEnemies);
+    //     doFlop();
+    //     $scope.turn = addCardToBoard();
+    //     $scope.river = addCardToBoard();
     }
     
     
     var randomGame = function(){
-        var rndIndex = Math.floor((Math.random()*3)+1);
-        var rndEnemies = Math.floor((Math.random()*3)+1);
-        switch(rndIndex){
-            case 0:
-                flopGame(rndEnemies);
+        var rndIndex = Math.floor((Math.random()*3));
+        //var rndEnemies = Math.floor((Math.random()*3)+1);
+        var rndEnemies = 0;
+        let cardsToFetch = 2+(rndIndex+3)+rndEnemies*2        
+        console.log("amount of cards to fetch: " + cardsToFetch);
+
+        $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + cardsToFetch)
+        .then(function(res){
+            $scope.gameCards = res.data.cards;
+            switch(rndIndex){
+                case 0:
+                    flopGame(rndEnemies);
+                    break;
+                case 1: 
+                    turnGame(rndEnemies);
+                    break;
+                case 2:
+                    riverGame(rndEnemies);	
+                    break;
                 break;
-            case 1: 
-                turnGame(rndEnemies);
-                break;
-            case 2:
-                riverGame(rndEnemies);	
-                break;
-            break;
-        }
+            }
+        })
+
+
         //$scope.calcRange();
         //$scope.calcEnemyRange();
         //$scope.readInput();	
     }
-    
-    $scope.newGame = function(){
-        console.log('newGame in game controller.')
-        $scope.deck = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
-        $scope.trash = [];
-        $scope.flop = [];
-        $scope.turn = "";
-        $scope.river = "";
-        $scope.enemies = [];
-        randomGame();
-        console.log($scope.board);
-    }
+
     }]);
