@@ -1,27 +1,37 @@
 <div ng-init="init()"></div>
 <div class="container">
     <div class="row">
-        <div id="board">
-            <div class="col-" ng-repeat="card in board">
-                    <img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{card.images.png}}">
+        <div class="col- mr-4 ">
+            <ul class="list-group">                
+                <li class="list-group-item list-group-item-primary" ng-repeat="hand in hands">{{hand}}</li>       
+            </ul>      
+        </div>
+
+        <div class="col-">
+            <div class="row"> 
+                <div id="board">
+                    <div class="col-" ng-repeat="card in board">
+                            <img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{card.images.png}}">
+                    </div>
+                </div>
+            </div>       
+
+            <div class="row">
+                <div id="hand">
+                    <img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{holding[0].images.png}}">
+                    <img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{holding[1].images.png}}">
+                </div>       
             </div>
-        </div>      
-    </div>
-    <div class="row">
-        <div id="hand">
-            <img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{holding[0].images.png}}">
-            <img class="boardCard" ng-style="{width: 63.5, height: 88.9}" ng-src="{{holding[1].images.png}}">
-        </div>       
+        </div>
     </div>
 </div>
 
 </br></br></br></br></br></br>
+<button class="gameButton" ng-show="board.length!=5" ng-click=newCard()>{{newCardType}}</button>
+<button class="gameButton" ng-click=startGame()>New Game</button>
 
-<button ng-click=startGame()>New Game</button>
-<button ng-show="board.length!=5" ng-click=newCard()>{{newCardType}}</button>
-<!-- 
-Board: {{board}}</br>
-flop: {{flop}}</br>
+<!--Board: {{board}}</br>
+ flop: {{flop}}</br>
 turn: {{turn}}</br>
 river: {{river}}</br>
 holding: {{holding}} </br> -->

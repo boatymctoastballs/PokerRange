@@ -10,22 +10,31 @@ a {
 
 .boardCard{
   float: left;
-  margin-top: 100px;
   margin-right: 5px;
-  margin-bottom: 100px;
+  /*margin-top: 50px;
+  
+  margin-bottom: 50px;*/
 }
 
 
 #board{
-  width: 337.5px;
+  width: 342.5px;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 50px;
 }
 
 #hand{
   width: 137px;
   display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gameButton{
+  display: block;
+  margin-bottom: 10px;
   margin-left: auto;
   margin-right: auto;
 }
