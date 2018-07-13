@@ -19,6 +19,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
         $scope.flop = [];
         $scope.turn = {};
         $scope.river = {};
+        $scope.newCardType = '';
         $scope.holding = []; //2 cards
         $scope.gameCards = [];
         $scope.remaining = 0;  
@@ -33,23 +34,139 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
             });
     }
 
-
-
-
-    var findRange = function(){
+    var findRange = function(gameType){
         $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + $scope.remaining) 
             .then(function(res){
             console.log(res.data.cards);
-                let deck = res.data.cards;           
-                let threeOfDeck = Combinatorics.bigCombination(deck, 3);
-                console.log(threeOfDeck.length);
-                while(a = threeOfDeck.next()){
-                console.log(a);
-                } 
-                let twoOfDeck = Combinatorics.bigCombination(deck, 2);
+            $scope.allHands = [];
+            let allHands = [];
+            let deck = res.data.cards;
+            
+            if(gameType=='Flop'){
+
+                //IN FLOP GAME
+                //Take 0 from holding 
+                //Take 3 from board
+                //Take 2 from deck
+                //2 deck + 3 board
+
+
+                //IN FLOP-, TURN GAME
+                //Take 1 from holding 
+                //Take 3 from board
+                //Take 1 from deck
+                //1 deck + 3 board + 1 holding
+
+                //IN FLOP GAME
+                //Take 1 from holding 
+                //Take 2 from board
+                //Take 2 from deck
+                //2 deck + 2 board + 1 holding
+
+                //IN FLOP-, TURN-, RIVE GAME
+                //Take 2 from holding 
+                //Take 3 from board
+                //3 board + 2 holding
+
+                //IN FLOP-, TURN GAME
+                //Take 2 from holding 
+                //Take 2 from board
+                //Take 1 from deck
+                //1 deck + 2 board + 2 holding
+
+                //IN FLOP GAME
+                //Take 2 from holding 
+                //Take 1 from board
+                //Take 2 from deck
+                //2 deck + 1 board + 2 holding
+
+
+
+                //Take 2 from deck
+                let twoOfDeck = Combinatorics.bigCombination(deck, 2);            
                 while(a = twoOfDeck.next()){
-                console.log(a);
-                }      
+                    //Take 3 from board
+                    let threeOfBoard = Combinatorics.combination($scope.board, 3);                
+                    while(b = threeOfBoard.next()){
+                        //Take 0 from holding
+                        //2 deck + 3 board
+                        allHands.push(b + a)                    
+                    } 
+
+                    //Take 2 from board
+                    let twoOfBoard = Combinatorics.combination($scope.board, 2);                
+                    while(b = twoOfBoard.next()){
+                        //Take 1 from holding
+                        //2 deck + 2 board + 1 holding
+                        let oneOfHolding = Combinatorics.combination($scope.holding, 1);
+                        while(c = oneOfHolding.next()){
+                            allHands.push(c + b + a)
+                        }
+                    }
+
+                    //Take 1 from board
+                    let oneOfBoard = Combinatorics.combination($scope.board, 1);                
+                    while(b = oneOfBoard.next()){
+                        //Take 2 from holding
+                        //2 deck + 1 board + 2 holding
+                        let oneOfHolding = Combinatorics.combination($scope.holding, 2);
+                        while(c = oneOfHolding.next()){
+                            allHands.push(c + b + a)
+                        }
+                    }  
+                } 
+            }
+            else if(gameType=='Turn'){
+                //IN TURN GAME
+                //Take 0 from holding 
+                //Take 4 from board
+                //Take 1 from deck
+                //1 deck + 4 board
+
+                //IN TURN-, RIVER GAME
+                //Take 1 from holding 
+                //Take 4 from board
+                //Take 0 from deck
+                //1 holding + 4 board
+
+                //IN FLOP-, TURN GAME
+                //Take 1 from holding
+                //Take 3 from board
+                //Take 1 from deck
+                //1 deck + 3 board + 1 holding
+
+                //IN FLOP-, TURN GAME
+                //Take 2 from holding
+                //Take 2 from board
+                //Take 1 from deck
+                //1 deck + 2 board + 2 holding
+
+                //IN FLOP-, TURN-, RIVER GAME
+                //Take 2 from holding
+                //Take 3 from board
+                //3 board + 2 holding
+            }
+
+            if(gameType == 'River'){
+                //IN RIVER GAME
+                //Take 0 from holding
+                //Take 5 from board
+                //5 board
+
+                //IN TURN-, RIVER GAME
+                //Take 1 from holding
+                //take 4 from board
+                //4 board + 1 holding
+
+                //IN FLOP-, TURN-, RIVER GAME
+                //Take 2 from holding
+                //Take 3 from board
+                //3 board + 2 holding
+            }
+
+            console.log(allHands.length);
+            console.log(allHands);
+            $scope.allHands = allHands;
         });
        
     }
@@ -66,36 +183,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
     //     "QUADS" : 7,
     //     "STRAIGHTFLUSH" : 8
     // }
-    
-    // var suitType = {
-    //     "HEARTS" : 0,
-    //     "SPADES" : 1,
-    //     "DIAMONDS" : 2,
-    //     "CLUBS" : 3
-    // }
-    
-    // var cards = [];    
-    // for (var i = 1; i < 14; i++) {
-    //     cards.push(new card('HEARTS', i));
-    //     cards.push(new card('SPADES', i));
-    //     cards.push(new card('DIAMONDS', i));
-    //     cards.push(new card('CLUBS', i));
-    // }
-    
 
-    
-
-    // $scope.deck = [];
-    // $scope.trash = [];
-    
-
-    
-    // $scope.enemyHoldings = [];
-    // $scope.holding = []; //2 cards
-    
-    // $scope.range = [];
-    // $scope.enemyRange = [];
-    
    // var calcRange = function(){
         //all possible hands - useless hands = (a pair or more)
         //all possible kombinations of hands from the 2 cards you are holding, the board and the rest of the cards in the deck:
@@ -121,54 +209,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
         //holding + 1 boardCards + 2dCards
         //holding + 2 boardCards + 2dCards
         //holding + 3 boardCards 
-        //
+ 
     
-    // }
-    
-    // var drawCard = function(){
-    //     var deckIndex = Math.floor(Math.random()*($scope.deck.length-1)+1); // +1 ?
-    //     var index = $scope.deck[deckIndex];
-    //     $scope.deck.splice(deckIndex,1);	
-    //     return cards[index];
-    // }
-    
-    
-    // var doFlop = function(){
-        // for (var i = 0; i < 3; i++) {
-        //     let card = drawCard();
-        // }       
-    // }
-    
-    //makes a hand(c1,c2,null,null,null)
-    // var makeHands = function(amountOfEnemies){
-    //     for (var i = 0; i<amountOfEnemies+1; i++) {
-
-            
-
-
-            // var enemy = {};
-            // var tempHolding = [];
-            // for(var j = 0; j<2; j++){
-            //     tempHolding.push(drawCard());
-            // }		
-            // if(i==0){
-            //     $scope.holding = tempHolding;
-            // }
-            // else{
-            //     enemy[i] = tempHolding;
-            //     $scope.enemyHoldings.push(enemy);	
-            // }
-            
-    //     }
-    // }
-    
-    
-    // var addCardToBoard = function(){
-    //     let card = drawCard();
-    //     $scope.board.push(card);
-    //     return card
-    // }
-    $scope.newCardType = '';
     $scope.newCard = function(){
         let gameType = $scope.board.length;
 
@@ -181,6 +223,9 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
                 $scope.board.push(res.data.cards[0]);
                 $scope.turn = res.data.cards[0];
                 $scope.newCardType = 'River';
+                
+                findRange('Turn');
+
             });
         }
         else if(gameType==4){
@@ -191,6 +236,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
                 $scope.gameCards.push(res.data.cards[0]);
                 $scope.board.push(res.data.cards[0]);
                 $scope.river = res.data.cards[0];
+
+                findRange('River');
             });
         }        
     }
@@ -243,23 +290,20 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
                 case 0:
                     $scope.newCardType = 'Turn';
                     flopGame(rndEnemies);
+                    findRange('Flop');
                     break;
                 case 1: 
                     $scope.newCardType = 'River';
                     turnGame(rndEnemies);
+                    findRange();
+                    findRange('Turn');
                     break;
                 case 2:                    
-                    riverGame(rndEnemies);	
+                    riverGame(rndEnemies);
+                    findRange('River');	
                     break;
                 break;
-            }
-            findRange();
+            }            
         })
-
-        
-        //$scope.calcRange();
-        //$scope.calcEnemyRange();
-        //$scope.readInput();	
     }
-
-    }]);
+}]);
