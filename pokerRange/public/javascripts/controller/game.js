@@ -21,18 +21,19 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
         $scope.river = {};
         $scope.newCardType = '';
         $scope.holding = []; //2 cards
+        $scope.deck = [];
         $scope.gameCards = [];
         $scope.remaining = 0;  
-        $http.get('https://deckofcardsapi.com/api/deck/new/')
+        $http.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
             .then(function(res){
-                $scope.deck_id = res.data.deck_id;
-                $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/shuffle/?deck_count=1')
-                    .then(function(res){                        
-                        randomGame();
-                    });
-                
+                $scope.deck_id = res.data.deck_id;  
+                $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=52')
+                .then(function(res){
+                    $scope.deck = res.data.cards;
+                    randomGame();                
+                });  
             });
-    }
+    }        
 
     var identifyHand = function(hand){
         //Use service hand to identify hand. 
@@ -40,13 +41,10 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
 
 
     //Call identifyHand on each combination to filter out useless hands from $scope.allHands.
-    var findRange = function(gameType){
-        $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + $scope.remaining) 
-            .then(function(res){
-            console.log(res.data.cards);
+    var findRange = function(gameType){           
             $scope.allHands = [];
             let allHands = [];
-            let deck = res.data.cards;
+            let deck = $scope.deck.slice(0,$scope.remaining);
             
             if(gameType=='Flop'){
 
@@ -172,9 +170,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
 
             console.log(allHands.length);
             console.log(allHands);
-            $scope.allHands = allHands;
-        });
-       
+            $scope.allHands = allHands;       
     }
 
 
@@ -216,35 +212,23 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
         //holding + 2 boardCards + 2dCards
         //holding + 3 boardCards 
  
-    
+    //Adds new card to board - turn or river.
     $scope.newCard = function(){
         let gameType = $scope.board.length;
+        let newCardPos = $scope.remaining-1;
+        let newCard = $scope.deck[newCardPos];
+        $scope.remaining = newCardPos;
+        $scope.gameCards.push(newCard);
+        $scope.board.push(newCard);
 
-        if(gameType==3){
-            $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + 1)
-            .then(function(res){
-                $scope.remaining = res.data.remaining;
-                console.log(res.data.cards);
-                $scope.gameCards.push(res.data.cards[0]);
-                $scope.board.push(res.data.cards[0]);
-                $scope.turn = res.data.cards[0];
-                $scope.newCardType = 'River';
-                
-                findRange('Turn');
-
-            });
+        if(gameType==3){               
+            $scope.turn = newCard;
+            $scope.newCardType = 'River';                
+            findRange('Turn');
         }
-        else if(gameType==4){
-            $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + 1)
-            .then(function(res){
-                $scope.remaining = res.data.remaining;
-                console.log(res.data.cards);
-                $scope.gameCards.push(res.data.cards[0]);
-                $scope.board.push(res.data.cards[0]);
-                $scope.river = res.data.cards[0];
-
-                findRange('River');
-            });
+        else if(gameType==4){            
+            $scope.river = newCard;
+            findRange('River');
         }        
     }
 
@@ -286,30 +270,26 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
         var rndEnemies = 0;
         let cardsToFetch = 2+(rndIndex+3)+rndEnemies*2        
         console.log("amount of cards to fetch: " + cardsToFetch);
-
-        $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + cardsToFetch)
-        .then(function(res){
-            $scope.remaining = res.data.remaining;
-            console.log(res.data.cards);
-            $scope.gameCards = res.data.cards;
-            switch(rndIndex){
-                case 0:
-                    $scope.newCardType = 'Turn';
-                    flopGame(rndEnemies);
-                    findRange('Flop');
-                    break;
-                case 1: 
-                    $scope.newCardType = 'River';
-                    turnGame(rndEnemies);
-                    findRange();
-                    findRange('Turn');
-                    break;
-                case 2:                    
-                    riverGame(rndEnemies);
-                    findRange('River');	
-                    break;
+        $scope.remaining = 52-cardsToFetch;
+        $scope.gameCards = $scope.deck.slice($scope.remaining)
+        switch(rndIndex){
+            case 0:
+                $scope.newCardType = 'Turn';
+                flopGame(rndEnemies);
+                findRange('Flop');
                 break;
-            }            
-        })
+            case 1: 
+                $scope.newCardType = 'River';
+                turnGame(rndEnemies);
+                findRange();
+                findRange('Turn');
+                break;
+            case 2:                    
+                riverGame(rndEnemies);
+                findRange('River');	
+                break;
+            break;
+        }   
     }
+
 }]);
