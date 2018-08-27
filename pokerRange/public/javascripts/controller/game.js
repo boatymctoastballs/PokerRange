@@ -34,6 +34,12 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
             });
     }
 
+    var identifyHand = function(hand){
+        //Use service hand to identify hand. 
+    }
+
+
+    //Call identifyHand on each combination to filter out useless hands from $scope.allHands.
     var findRange = function(gameType){
         $http.get('https://deckofcardsapi.com/api/deck/' + $scope.deck_id + '/draw/?count=' + $scope.remaining) 
             .then(function(res){

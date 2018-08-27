@@ -50,6 +50,7 @@ app.factory('hand', ['card', '$filter', function(card, $filter){
 		return result;
 	}
 
+	//Fix for wheel (ACE,2,3,4,5)
 	var isStraight = function(){
 		var result = true;
 		var sortedHand = $filter('orderBy')(this.hand.value);
@@ -296,11 +297,60 @@ app.factory('hand', ['card', '$filter', function(card, $filter){
 		}
 	}
 
+	//Change ace,jack,queen,king to 14,11,12,13
+	var formatHandIn = function(hand){
+		let tempHand = [];
+		for (var i = 0; i < hand.length; i++) {
+			switch(hand[i].value){
+				case 'JACK':
+					hand[i].value = 11;
+					tempHand.push(hand[i]);
+				case 'QUEEN':
+					hand[i].value = 12;
+					tempHand.push(hand[i]);
+				case 'KING':
+					hand[i].value = 13;
+					tempHand.push(hand[i]);
+				case 'ACE':
+					hand[i].value = 14;
+					tempHand.push(hand[i]);
+				default:
+					tempHand.push(hand[i]);		
+			}
+		}
+		return tempHand;
+	}
+
+	//Change 14,11,12,13 to ace,jack,queen,king
+	var formatHandOut = function(hand){
+		let tempHand = [];
+		for (var i = 0; i < hand.length; i++) {
+			switch(hand[i].value){
+				case 11:
+					hand[i].value = 'JACK';
+					tempHand.push(hand[i]);
+				case 12:
+					hand[i].value = 'QUEEN';
+					tempHand.push(hand[i]);
+				case 13:
+					hand[i].value = 'KING';
+					tempHand.push(hand[i]);
+				case 14:
+					hand[i].value = 'ACE';
+					tempHand.push(hand[i]);
+				default:
+					tempHand.push(hand[i]);		
+			}
+		}
+		return tempHand;
+	}
+
 	return function(hand){
-		this.hand = hand;
+
+		this.hand = formatHandIn(hand);
 
 		this.getHandCards = function(){
-			return this.handCards;
+			return formatHandOut(this.handCards);
 		}
 
 		this.getHandType = function(){
@@ -309,7 +359,7 @@ app.factory('hand', ['card', '$filter', function(card, $filter){
 		}
 
 		this.getHand = function(){
-			return this.hand;
+			return formatHandOut(this.hand)
 		}
 		//returns true if hand is better than otherHand
 		this.betterThan = function(otherHand){
