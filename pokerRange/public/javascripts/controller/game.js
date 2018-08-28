@@ -1,4 +1,4 @@
-app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', function($scope, $rootScope, $http, card, hand){
+app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArrayService', function($scope, $rootScope, $http, card, hand, addArrayService){
 
     //https://deckofcardsapi.com/ 
       $scope.init = function(){
@@ -46,13 +46,13 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
             let allHands = [];
             let deck = $scope.deck.slice(0,$scope.remaining);
             
-            if(gameType=='Flop'){
+            if(gameType == 'Flop'){
 
-                //IN FLOP GAME
-                //Take 0 from holding 
+                 //IN FLOP-, TURN-, RIVE GAME
+                //Take 2 from holding 
                 //Take 3 from board
-                //Take 2 from deck
-                //2 deck + 3 board
+                //3 board + 2 holding
+
 
 
                 //IN FLOP-, TURN GAME
@@ -61,22 +61,25 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
                 //Take 1 from deck
                 //1 deck + 3 board + 1 holding
 
-                //IN FLOP GAME
-                //Take 1 from holding 
-                //Take 2 from board
-                //Take 2 from deck
-                //2 deck + 2 board + 1 holding
-
-                //IN FLOP-, TURN-, RIVE GAME
-                //Take 2 from holding 
-                //Take 3 from board
-                //3 board + 2 holding
-
                 //IN FLOP-, TURN GAME
                 //Take 2 from holding 
                 //Take 2 from board
                 //Take 1 from deck
                 //1 deck + 2 board + 2 holding
+
+
+
+                //IN FLOP GAME
+                //Take 0 from holding 
+                //Take 3 from board
+                //Take 2 from deck
+                //2 deck + 3 board
+
+                //IN FLOP GAME
+                //Take 1 from holding 
+                //Take 2 from board
+                //Take 2 from deck
+                //2 deck + 2 board + 1 holding
 
                 //IN FLOP GAME
                 //Take 2 from holding 
@@ -84,54 +87,105 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
                 //Take 2 from deck
                 //2 deck + 1 board + 2 holding
 
+               
+
+                //Take 0 from deck------------------
+                //Take 3 of board
+                let threeOfBoard = Combinatorics.combination($scope.board, 3);
+                while(a = threeOfBoard.next()){
+                    //Take 2 of holding
+                    let twoOfHolding = Combinatorics.combination($scope.holding, 2)
+                    while(b = twoOfHolding.next()){
+                        //3 board + 2 holding
+                        let tempHand = a + b;
+                        let createdHand = hand.getHandType(tempHand);                        
+                        console.log("Flop game 3 board 2 holding: ")
+                        console.log(createdHand);
+                        allHands.push(tempHand);
+                    }
+                }                
 
 
-                //Take 2 from deck
+                //Take 1 from deck------------------
+                let oneOfDeck = Combinatorics.combination(deck, 1);
+                while(a=oneOfDeck.next()){
+                    //Take 2 from board
+                    let twoOfBoard = Combinatorics.combination($scope.board, 2);
+                    while(b = twoOfBoard.next()){
+                        //Take 2 from holding
+                        let twoOfHolding = Combinatorics.combination($scope.holding, 2)
+                        while(c = twoOfHolding.next()){
+                            //1 deck + 2 board + 2 holding
+                            allHands.push(a + b + c);
+                        }
+                    }
+
+                    //Take 3 from board
+                    let threeOfBoard = Combinatorics.combination($scope.board, 3);
+                    while(b = threeOfBoard.next()){
+                        //Take 1 from holding
+                        let oneOfHolding = Combinatorics.combination($scope.holding, 1)
+                        while(c = oneOfHolding.next()){
+                            //1 deck + 3 board + 1 holding
+                            allHands.push(a + b + c);
+                        }
+                    }    
+                }
+
+                
+                //Take 2 from deck--------------------
                 let twoOfDeck = Combinatorics.bigCombination(deck, 2);            
                 while(a = twoOfDeck.next()){
                     //Take 3 from board
-                    let threeOfBoard = Combinatorics.combination($scope.board, 3);                
+                    let threeOfBoard = Combinatorics.combination($scope.board, 3);
                     while(b = threeOfBoard.next()){
                         //Take 0 from holding
                         //2 deck + 3 board
-                        allHands.push(b + a)                    
+                        allHands.push(b + a);              
                     } 
 
                     //Take 2 from board
                     let twoOfBoard = Combinatorics.combination($scope.board, 2);                
                     while(b = twoOfBoard.next()){
-                        //Take 1 from holding
-                        //2 deck + 2 board + 1 holding
+                        //Take 1 from holding                        
                         let oneOfHolding = Combinatorics.combination($scope.holding, 1);
                         while(c = oneOfHolding.next()){
-                            allHands.push(c + b + a)
+                            //2 deck + 2 board + 1 holding
+                            allHands.push(c + b + a);
                         }
                     }
 
                     //Take 1 from board
                     let oneOfBoard = Combinatorics.combination($scope.board, 1);                
                     while(b = oneOfBoard.next()){
-                        //Take 2 from holding
-                        //2 deck + 1 board + 2 holding
+                        //Take 2 from holding                        
                         let oneOfHolding = Combinatorics.combination($scope.holding, 2);
                         while(c = oneOfHolding.next()){
-                            allHands.push(c + b + a)
+                            //2 deck + 1 board + 2 holding
+                            allHands.push(c + b + a);
                         }
                     }  
-                } 
+                }
             }
-            else if(gameType=='Turn'){
-                //IN TURN GAME
-                //Take 0 from holding 
-                //Take 4 from board
-                //Take 1 from deck
-                //1 deck + 4 board
+            else if(gameType == 'Turn'){
+
+                //IN FLOP-, TURN-, RIVER GAME
+                //Take 2 from holding
+                //Take 3 from board
+                //3 board + 2 holding
 
                 //IN TURN-, RIVER GAME
                 //Take 1 from holding 
                 //Take 4 from board
                 //Take 0 from deck
-                //1 holding + 4 board
+                //4 board + 1 holding
+
+
+                //IN TURN GAME
+                //Take 0 from holding 
+                //Take 4 from board
+                //Take 1 from deck
+                //1 deck + 4 board
 
                 //IN FLOP-, TURN GAME
                 //Take 1 from holding
@@ -145,10 +199,62 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
                 //Take 1 from deck
                 //1 deck + 2 board + 2 holding
 
-                //IN FLOP-, TURN-, RIVER GAME
-                //Take 2 from holding
-                //Take 3 from board
-                //3 board + 2 holding
+                
+                //Take 0 from deck------------------
+                //Take 3 of board
+                let threeOfBoard = Combinatorics.combination($scope.board, 3);
+                while(a = threeOfBoard.next()){
+                    //Take 2 of holding
+                    let twoOfHolding = Combinatorics.combination($scope.holding, 2)
+                    while(b = twoOfHolding.next()){
+                        //3 board + 2 holding
+                        allHands.push(a + b);
+                    }
+                }  
+
+                //Take 4 of board
+                let fourOfBoard = Combinatorics.combination($scope.board, 4);
+                while(a = fourOfBoard.next()){
+                    //Take 1 of holding
+                    let oneOfHolding = Combinatorics.combination($scope.holding, 1)
+                    while(b = oneOfHolding.next()){
+                        //4 board + 1 holding
+                        allHands.push(a + b);
+                    }
+                }  
+
+                //Take 1 of deck
+                let oneOfDeck = Combinatorics.combination(deck, 1);
+                while(a = oneOfDeck.next()){
+                    //Take 4 of board
+                    let fourOfBoard = Combinatorics.combination($scope.board, 4)
+                    while(b = fourOfBoard.next()){
+                        //1 deck + 4 board
+                        allHands.push(a + b);
+                    }
+
+                    //Take 3 of board
+                    let threeOfBoard = Combinatorics.combination($scope.board, 3)
+                    while(b = threeOfBoard.next()){
+                        //Take 1 of holding
+                        let oneOfHolding = Combinatorics.combination($scope.holding, 1)
+                        while(c = oneOfHolding.next()){
+                            //1 deck + 3 board + 1 holding
+                            allHands.push(a + b + c);
+                        }                        
+                    }
+
+                    //Take 2 of board
+                    let twoOfBoard = Combinatorics.combination($scope.board, 2)
+                    while(b = twoOfBoard.next()){
+                        //Take 2 of holding
+                        let twoOfHolding = Combinatorics.combination($scope.holding, 2)
+                        while(c = twoOfHolding.next()){
+                            //1 deck + 2 board + 2 holding
+                            allHands.push(a + b + c);
+                        }                        
+                    }
+                }                 
             }
 
             if(gameType == 'River'){
@@ -166,6 +272,39 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', functio
                 //Take 2 from holding
                 //Take 3 from board
                 //3 board + 2 holding
+
+
+                //Take 5 of board
+                allHands.push($scope.board);
+
+                //Take 4 of board
+                let fourOfBoard = Combinatorics.combination($scope.board, 4);
+                while(a = fourOfBoard.next()){                    
+                    //Take 1 of holding
+                    let oneOfHolding = Combinatorics.combination($scope.holding, 1)
+                    while(b = oneOfHolding.next()){
+                        console.log($scope.board)
+                        console.log($scope.holding)
+                        console.log(a);
+                        console.log(b);
+                        console.log(addArrayService.add(a,b));
+                        //4 board + 1 holding
+                        allHands.push(a + b);
+                        let test = a+b;
+                    }
+                }
+
+
+                //Take 3 of board
+                let threeOfBoard = Combinatorics.combination($scope.board, 3);
+                while(a = threeOfBoard.next()){
+                    //Take 2 of holding
+                    let twoOfHolding = Combinatorics.combination($scope.holding, 2)
+                    while(b = twoOfHolding.next()){
+                        //3 board + 2 holding
+                        allHands.push(a + b);
+                    }
+                }
             }
 
             console.log(allHands.length);

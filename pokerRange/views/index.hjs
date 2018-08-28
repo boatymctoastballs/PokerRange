@@ -39,11 +39,12 @@
 <script type="text/javascript" src="/javascripts/controller/game.js"></script> 
 
 <!--Services-->
-
+<script type="text/javascript" src="/javascripts/service/hand.js"></script>
+<script type="text/javascript" src="/javascripts/service/addArray.js"></script>    
 <!--Directives-->  
 
 <!--Factories-->  
 <script type="text/javascript" src="/javascripts/factory/card.js"></script>
-<script type="text/javascript" src="/javascripts/factory/hand.js"></script>  
+{{!-- <script type="text/javascript" src="/javascripts/factory/hand.js"></script>   --}}
 </html>
 
