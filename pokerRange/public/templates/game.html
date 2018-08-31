@@ -27,7 +27,7 @@
 </div>
 
 </br></br></br></br></br></br>
-<button class="gameButton" ng-show="board.length!=5 || board.length==0" ng-click=newCard()>{{newCardType}}</button>
+<button class="gameButton" ng-show="board.length!=5 && board.length>2" ng-click=newCard()>{{newCardType}}</button>
 <button class="gameButton" ng-click=startGame()>New Game</button>
 
 <!--Board: {{board}}</br>

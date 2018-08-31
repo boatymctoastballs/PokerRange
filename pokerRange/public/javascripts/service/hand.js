@@ -53,8 +53,10 @@ app.service('hand', ['$filter', function($filter){
 	//Fix for wheel (ACE,2,3,4,5)
 	var isStraight = function(hand){
 		var result = true;
+		console.log("In isStraight() and about to calc sortedHand:");
 		var sortedHand = $filter('orderBy')(hand.value);
-		for (var i = 1; i < 5; i++) {
+		console.log(sortedHand);
+		for (var i = 1; i < hand.length-1; i++) {
 			if(sortedHand[i].value - sortedHand[i-1].value != 1){
 				result = false;
 				break;
@@ -85,22 +87,22 @@ app.service('hand', ['$filter', function($filter){
 			}
         }
         //FIX FIX FIX FIX FIX FIX FIX 
-		if(card1.count==4){
-			this.handCards = [
-			new card('HEARTS', card1.value), 
-			new card('SPADES', card1.value),
-			new card('DIAMONDS', card1.value),
-			new card('CLUBS', card1.value)
-			];
-		}
-		else if(card2.count==4){
-			this.handCards = [
-			new card('HEARTS', card2.value), 
-			new card('SPADES', card2.value),
-			new card('DIAMONDS', card2.value),
-			new card('CLUBS', card2.value)
-			];
-		}
+		// if(card1.count==4){
+		// 	this.handCards = [
+		// 	new card('HEARTS', card1.value), 
+		// 	new card('SPADES', card1.value),
+		// 	new card('DIAMONDS', card1.value),
+		// 	new card('CLUBS', card1.value)
+		// 	];
+		// }
+		// else if(card2.count==4){
+		// 	this.handCards = [
+		// 	new card('HEARTS', card2.value), 
+		// 	new card('SPADES', card2.value),
+		// 	new card('DIAMONDS', card2.value),
+		// 	new card('CLUBS', card2.value)
+		// 	];
+		// }
 		return card1.count==4 || card2.count==4		
 	}
 
@@ -307,17 +309,17 @@ app.service('hand', ['$filter', function($filter){
 	var formatHandIn = function(hand){
 		let tempHand = [];
 		for (var i = 0; i < hand.length; i++) {
-			switch(hand[i].value){
-				case 'JACK':
+			switch(hand[i].code.slice(0,1)){
+				case 'J':
 					hand[i].value = 11;
 					tempHand.push(hand[i]);
-				case 'QUEEN':
+				case 'Q':
 					hand[i].value = 12;
 					tempHand.push(hand[i]);
-				case 'KING':
+				case 'K':
 					hand[i].value = 13;
 					tempHand.push(hand[i]);
-				case 'ACE':
+				case 'A':
 					hand[i].value = 14;
 					tempHand.push(hand[i]);
 				default:
@@ -353,8 +355,9 @@ app.service('hand', ['$filter', function($filter){
 
     this.getHandType = function(handIn){
         let hand = formatHandIn(handIn);
-        let handType = whatHand(hand);
-        return {"handType" : handType, "handCards" : this.handCards};
+		let handType = whatHand(hand);
+		let handOut = formatHandOut(this.handCards);
+        return {"handType" : handType, "handCards" : handOut};
     }
 
 	// return function(hand){
