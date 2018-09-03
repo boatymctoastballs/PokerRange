@@ -53,10 +53,12 @@ app.service('hand', ['$filter', function($filter){
 	//Fix for wheel (ACE,2,3,4,5)
 	var isStraight = function(hand){
 		var result = true;
-		console.log("In isStraight() and about to calc sortedHand:");
-		var sortedHand = $filter('orderBy')(hand.value);
-		console.log(sortedHand);
-		for (var i = 1; i < hand.length-1; i++) {
+		console.log("In isStraight() and about to calc sortedHand:[" + hand[0].value + ", " + hand[1].value + ", " + hand[2].value + ", " + hand[3].value + ", "  + hand[4].value + "]");
+		//let sortedHand = $filter('orderBy')(hand, function(hand){return hand.value});
+		//let sortedHand = $filter('orderBy')(hand, 'value');
+		let sortedHand = hand.sort(function(a, b) { return a.value - b.value;});
+		console.log("In isStraight() hand SORTED:[" + sortedHand[0].value + ", " + sortedHand[1].value + ", " + sortedHand[2].value + ", " + sortedHand[3].value + ", "  + sortedHand[4].value + "]");
+		for (var i = 1; i < sortedHand.length; i++) {
 			if(sortedHand[i].value - sortedHand[i-1].value != 1){
 				result = false;
 				break;
@@ -170,6 +172,7 @@ app.service('hand', ['$filter', function($filter){
 
 	var isSet = function(hand){
 		var result = false;
+		let setCard = 0;
 		for (var i = 0; i < 5; i++) {
 			if(hand.reduce(function(n, card){
 				return n + (card.value == hand[i].value);
@@ -205,6 +208,7 @@ app.service('hand', ['$filter', function($filter){
 	}
 
 	var whatHand = function(hand){
+		console.log("whatHand, hand.length = " + hand.length.toString());
         let _handType = null;
 		if(hand.length!=5){
 			_handType = null;
@@ -312,19 +316,20 @@ app.service('hand', ['$filter', function($filter){
 			switch(hand[i].code.slice(0,1)){
 				case 'J':
 					hand[i].value = 11;
-					tempHand.push(hand[i]);
+					break;
 				case 'Q':
 					hand[i].value = 12;
-					tempHand.push(hand[i]);
+					break;
 				case 'K':
-					hand[i].value = 13;
-					tempHand.push(hand[i]);
+					hand[i].value = 13;					
+					break;
 				case 'A':
-					hand[i].value = 14;
-					tempHand.push(hand[i]);
+					hand[i].value = 14;					
+					break;
 				default:
-					tempHand.push(hand[i]);		
+					break;	
 			}
+			tempHand.push(hand[i]);
 		}
 		return tempHand;
 	}
@@ -336,19 +341,20 @@ app.service('hand', ['$filter', function($filter){
 			switch(hand[i].value){
 				case 11:
 					hand[i].value = 'JACK';
-					tempHand.push(hand[i]);
+					break;
 				case 12:
 					hand[i].value = 'QUEEN';
-					tempHand.push(hand[i]);
+					break;
 				case 13:
 					hand[i].value = 'KING';
-					tempHand.push(hand[i]);
+					break;
 				case 14:
 					hand[i].value = 'ACE';
-					tempHand.push(hand[i]);
+					break;
 				default:
-					tempHand.push(hand[i]);		
+					break;
 			}
+			tempHand.push(hand[i]);	
 		}
 		return tempHand;
     }   
@@ -359,26 +365,4 @@ app.service('hand', ['$filter', function($filter){
 		let handOut = formatHandOut(this.handCards);
         return {"handType" : handType, "handCards" : handOut};
     }
-
-	// return function(hand){
-
-	// 	this.hand = formatHandIn(hand);
-
-	// 	this.getHandCards = function(){
-	// 		return formatHandOut(this.handCards);
-	// 	}
-
-	// 	this.getHandType = function(){
-	// 		whatHand();
-	// 		return this._handType;
-	// 	}
-
-	// 	this.getHand = function(){
-	// 		return formatHandOut(this.hand)
-	// 	}
-	// 	//returns true if hand is better than otherHand
-	// 	this.betterThan = function(otherHand){
-	// 		return betterThan(otherHand);
-	// 	}
-	// }
 }]);

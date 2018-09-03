@@ -97,18 +97,15 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     let twoOfHolding = Combinatorics.combination($scope.holding, 2)
                     while(b = twoOfHolding.next()){
                         //3 board + 2 holding                        
-                        let tempHand = addArrayService.add(a,b)
-                        let createdHand = hand.getHandType(tempHand);                        
-                        console.log("Flop game 3 board 2 holding: ")
-                        console.log(createdHand);
-                        allHands.push(tempHand);
+                        let addedArray = addArrayService.add(a,b);  
+                        let createdHand = hand.getHandType(addedArray);
+                        allHands.push(addedArray); 
                     }
                 }                
 
 
                 //Take 1 from deck------------------
-                let oneOfDeck = Combinatorics.combination(deck, 1);
-                while(a=oneOfDeck.next()){
+                for(var a = 0 ; a < $scope.deck.length; a++){
                     //Take 2 from board
                     let twoOfBoard = Combinatorics.combination($scope.board, 2);
                     while(b = twoOfBoard.next()){
@@ -116,7 +113,9 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         let twoOfHolding = Combinatorics.combination($scope.holding, 2)
                         while(c = twoOfHolding.next()){
                             //1 deck + 2 board + 2 holding
-                            allHands.push(a + b + c);
+                            let addedArray = addArrayService.add($scope.deck[a],b,c);  
+                            let createdHand = hand.getHandType(addedArray);
+                            allHands.push(addedArray); 
                         }
                     }
 
@@ -124,10 +123,11 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     let threeOfBoard = Combinatorics.combination($scope.board, 3);
                     while(b = threeOfBoard.next()){
                         //Take 1 from holding
-                        let oneOfHolding = Combinatorics.combination($scope.holding, 1)
-                        while(c = oneOfHolding.next()){
+                        for(var c = 0 ; c < $scope.holding.length; c++){
                             //1 deck + 3 board + 1 holding
-                            allHands.push(a + b + c);
+                            let addedArray = addArrayService.add($scope.deck[a],b, $scope.holding[c]);  
+                            let createdHand = hand.getHandType(addedArray);
+                            allHands.push(addedArray); 
                         }
                     }    
                 }
@@ -141,30 +141,34 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     while(b = threeOfBoard.next()){
                         //Take 0 from holding
                         //2 deck + 3 board
-                        allHands.push(b + a);              
+                        let addedArray = addArrayService.add(a,b);  
+                        let createdHand = hand.getHandType(addedArray);
+                        allHands.push(addedArray);              
                     } 
 
                     //Take 2 from board
                     let twoOfBoard = Combinatorics.combination($scope.board, 2);                
                     while(b = twoOfBoard.next()){
-                        //Take 1 from holding                        
-                        let oneOfHolding = Combinatorics.combination($scope.holding, 1);
-                        while(c = oneOfHolding.next()){
+                        //Take 1 from holding    
+                        for(var c = 0 ; c < $scope.holding.length; c++){
                             //2 deck + 2 board + 1 holding
-                            allHands.push(c + b + a);
+                            let addedArray = addArrayService.add(a,b,$scope.holding[c]);  
+                            let createdHand = hand.getHandType(addedArray);
+                            allHands.push(addedArray); 
                         }
                     }
 
                     //Take 1 from board
-                    let oneOfBoard = Combinatorics.combination($scope.board, 1);                
-                    while(b = oneOfBoard.next()){
+                    for(var b = 0 ; b < $scope.board.length; b++){
                         //Take 2 from holding                        
                         let oneOfHolding = Combinatorics.combination($scope.holding, 2);
                         while(c = oneOfHolding.next()){
                             //2 deck + 1 board + 2 holding
-                            allHands.push(c + b + a);
-                        }
-                    }  
+                            let addedArray = addArrayService.add(a,$scope.board[b],c);  
+                            let createdHand = hand.getHandType(addedArray);
+                            allHands.push(addedArray); 
+                        }  
+                    }
                 }
             }
             else if(gameType == 'Turn'){
@@ -208,7 +212,9 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     let twoOfHolding = Combinatorics.combination($scope.holding, 2)
                     while(b = twoOfHolding.next()){
                         //3 board + 2 holding
-                        allHands.push(a + b);
+                        let addedArray = addArrayService.add(a,b);  
+                        let createdHand = hand.getHandType(addedArray);
+                        allHands.push(addedArray); 
                     }
                 }  
 
@@ -216,32 +222,35 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                 let fourOfBoard = Combinatorics.combination($scope.board, 4);
                 while(a = fourOfBoard.next()){
                     //Take 1 of holding
-                    let oneOfHolding = Combinatorics.combination($scope.holding, 1)
-                    while(b = oneOfHolding.next()){
+                    for(var b = 0 ; b < $scope.holding.length; b++){
                         //4 board + 1 holding
-                        allHands.push(a + b);
+                        let addedArray = addArrayService.add(a,$scope.holding[b]);  
+                        let createdHand = hand.getHandType(addedArray);
+                        allHands.push(addedArray); 
                     }
                 }  
 
                 //Take 1 of deck
-                let oneOfDeck = Combinatorics.combination(deck, 1);
-                while(a = oneOfDeck.next()){
+                for(var a = 0 ; a < $scope.deck.length; a++){
                     //Take 4 of board
                     let fourOfBoard = Combinatorics.combination($scope.board, 4)
                     while(b = fourOfBoard.next()){
                         //1 deck + 4 board
-                        allHands.push(a + b);
+                        let addedArray = addArrayService.add($scope.deck[a],b);  
+                        let createdHand = hand.getHandType(addedArray);
+                        allHands.push(addedArray);                        
                     }
 
                     //Take 3 of board
                     let threeOfBoard = Combinatorics.combination($scope.board, 3)
                     while(b = threeOfBoard.next()){
                         //Take 1 of holding
-                        let oneOfHolding = Combinatorics.combination($scope.holding, 1)
-                        while(c = oneOfHolding.next()){
-                            //1 deck + 3 board + 1 holding
-                            allHands.push(a + b + c);
-                        }                        
+                        for(var c = 0 ; c < $scope.holding.length; c++){
+                            //1 deck + 3 board + 1 holding                            
+                            let addedArray = addArrayService.add($scope.deck[a],b,$scope.holding[c]);  
+                            let createdHand = hand.getHandType(addedArray);
+                            allHands.push(addedArray);                             
+                        }                    
                     }
 
                     //Take 2 of board
@@ -251,13 +260,16 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         let twoOfHolding = Combinatorics.combination($scope.holding, 2)
                         while(c = twoOfHolding.next()){
                             //1 deck + 2 board + 2 holding
-                            allHands.push(a + b + c);
+                            let addedArray = addArrayService.add($scope.deck[a],b,c);  
+                            let createdHand = hand.getHandType(addedArray);
+                            allHands.push(addedArray);                             
                         }                        
                     }
-                }                 
+                }             
             }
 
             if(gameType == 'River'){
+                console.log("IN RIVER GAME")
                 //IN RIVER GAME
                 //Take 0 from holding
                 //Take 5 from board
@@ -281,16 +293,10 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                 let fourOfBoard = Combinatorics.combination($scope.board, 4);
                 while(a = fourOfBoard.next()){                    
                     //Take 1 of holding
-                    for(var i = 0 ; i < $scope.holding.length; i++){
-                        // console.log($scope.board)
-                        // console.log($scope.holding)
-                        // console.log(a);
-                        // console.log($scope.holding[i]);
-                        let addedArray = addArrayService.add(a,$scope.holding[i]);
-                        console.log(addedArray);
+                    for(var i = 0 ; i < $scope.holding.length; i++){                                           
+                        let addedArray = addArrayService.add(a,$scope.holding[i]);  
                         let createdHand = hand.getHandType(addedArray);    
-                        console.log("createdHand:");
-                        console.log(createdHand);
+                        console.log("createdHand:" + createdHand.toString());
                         //4 board + 1 holding
                         allHands.push(addedArray);
                     }
@@ -304,10 +310,9 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     let twoOfHolding = Combinatorics.combination($scope.holding, 2)
                     while(b = twoOfHolding.next()){                        
                         let addedArray = addArrayService.add(a,b);
-                        console.log(addedArray);
+                        console.log(addedArray.toString());
                         let createdHand = hand.getHandType(addedArray);    
-                        console.log("createdHand:");
-                        console.log(createdHand);
+                        console.log("createdHand:" + createdHand.toString());
                         //3 board + 2 holding
                         allHands.push(addedArray);
                     }
@@ -330,32 +335,6 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
     //     "QUADS" : 7,
     //     "STRAIGHTFLUSH" : 8
     // }
-
-   // var calcRange = function(){
-        //all possible hands - useless hands = (a pair or more)
-        //all possible kombinations of hands from the 2 cards you are holding, the board and the rest of the cards in the deck:
-        //2 holding + 1 boardCards + 2 dCards (flop state - 1 boardCards of 3)
-        //2 holding + 2 boardCards + 1 dCards (flop or turn state - 2 boardCards of 3 or 4)
-        //2 holding + 3 boardCards 			  (flop or turn or river state - 3 boardCards of 3 or 4 or 5)
-        //2 holding  			   + 3 dCards (preflop)
-        //
-        //1 holding + 1 boardCards + 3 dCards (IMPOSSIBLE - if there are boardCards there cant be 3 more)
-        //1 holding + 2 boardCards + 2 dCards (flop state - 2 boardCards of 3)
-        //1 holding + 3 boardCards + 1 dCards (flop or turn state - 3 boardCards of 3 or 4)
-        //1 holding + 4 boardCards			  (turn or river state - 4 boardCards of 4 or 5)
-        //1 holding  			   + 4 dCards (preflop)
-        //
-        //0 holding + 1 boardCards + 4 dCards (IMPOSSIBLE - if there are boardCards there cant be 3 more)
-        //0 holding + 2 boardCards + 3 dCards (IMPOSSIBLE - if there are boardCards there cant be 3 more)
-        //0 holding + 3 boardCards + 2 dCards (flop state - 3 boardCards of 3)
-        //0 holding + 4 boardCards + 1 dCards (turn state - 4 boardCards of 4)
-        //0 holding + 5 boardCards + 0 dCards (river state - 5 boardCards of 5 - hand is full board)
-        //0 holding  			   + 5 dCards (all combinations from deck preflop)
-        //
-        //all possible hands from riverBoard:
-        //holding + 1 boardCards + 2dCards
-        //holding + 2 boardCards + 2dCards
-        //holding + 3 boardCards 
  
     //Adds new card to board - turn or river.
     $scope.newCard = function(){
@@ -379,18 +358,22 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
 
 
     var flopGame = function(rndEnemies){
+        $scope.newCardType = 'Turn';
         $scope.board = $scope.gameCards.slice(0,3);
         $scope.flop = $scope.gameCards.slice(0,3);        
         $scope.holding = $scope.gameCards.slice(3,5);
+        findRange('Flop');
         //makeHands(rndEnemies);
         // doFlop();	
     }
     
      var turnGame = function(rndEnemies){
+        $scope.newCardType = 'River';
         $scope.board = $scope.gameCards.slice(0,4);
         $scope.flop = $scope.gameCards.slice(0,3);
         $scope.turn = $scope.gameCards[3];
         $scope.holding = $scope.gameCards.slice(4,6);
+        findRange('Turn');
     //     makeHands(rndEnemies);
     //     doFlop();
     //     $scope.turn = addCardToBoard();
@@ -402,6 +385,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
         $scope.turn = $scope.gameCards[3];
         $scope.river = $scope.gameCards[4];
         $scope.holding = $scope.gameCards.slice(5,7);
+        findRange('River'); 
     //     makeHands(rndEnemies);
     //     doFlop();
     //     $scope.turn = addCardToBoard();
@@ -419,18 +403,13 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
         $scope.gameCards = $scope.deck.slice($scope.remaining)
         switch(rndIndex){
             case 0:
-                $scope.newCardType = 'Turn';
-                flopGame(rndEnemies);
-                findRange('Flop');
+                flopGame(rndEnemies);                
                 break;
-            case 1: 
-                $scope.newCardType = 'River';
-                turnGame(rndEnemies);
-                findRange('Turn');
+            case 1:                 
+                turnGame(rndEnemies);                
                 break;
             case 2:                    
-                riverGame(rndEnemies);
-                findRange('River');	
+                riverGame(rndEnemies);                
                 break;
             break;
         }   
