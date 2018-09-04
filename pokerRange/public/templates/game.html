@@ -1,9 +1,12 @@
 <div ng-init="init()"></div>
+
 <div class="container">
     <div class="row">
         <div class="col- mr-4 ">
             <ul class="list-group">                
-                <li class="list-group-item list-group-item-primary" ng-repeat="hand in hands">{{hand}}</li>       
+                <li class="list-group-item list-group-item-secondary" ng-repeat="hand in hands">{{hand.type}}
+                <span class="badge badge-hands[$index].color">New</span> {{$index}} {{hands[$index].color}}
+                </li>       
             </ul>      
         </div>
 
@@ -25,13 +28,17 @@
         </div>
     </div>
 </div>
+</br></br></br></br>
+<div class="container">    
+     <div class="row keys">             
+        <div class="col- key" ng-repeat="key in keys">
+        <img ng-src="../images/keys/computer_key_{{key.src}}" height="42" width="42"/>
+        </br>
+        <p2 style="color:#FFFFFF">{{key.desc}}</p2>
+        </div>        
+    </div>
 
-</br></br></br></br></br></br>
+</div>
+</br></br></br>
 <button class="gameButton" ng-show="board.length!=5 && board.length>2" ng-click=newCard()>{{newCardType}}</button>
 <button class="gameButton" ng-click=startGame()>New Game</button>
-
-<!--Board: {{board}}</br>
- flop: {{flop}}</br>
-turn: {{turn}}</br>
-river: {{river}}</br>
-holding: {{holding}} </br> -->

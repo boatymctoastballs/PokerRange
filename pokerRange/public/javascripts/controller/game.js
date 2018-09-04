@@ -1,20 +1,24 @@
-app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArrayService', function($scope, $rootScope, $http, card, hand, addArrayService){
+app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArrayService', '$document', function($scope, $rootScope, $http, card, hand, addArrayService, $document){
 
     //https://deckofcardsapi.com/ 
       $scope.init = function(){
-          $scope.startGame();  
-        // $scope.deck = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51];
-        // $scope.trash = [];
-        // $scope.flop = [];
-        // $scope.turn = "";
-        // $scope.river = "";
-        // $scope.enemies = [];
-        // randomGame();
-        // console.log($scope.board);
+        $scope.keys = [{'src': 'A_T.png', 'desc' : 'Straight Flush'}, {'src': 'S_T.png', 'desc' : 'Four Of A Kind'},
+        {'src': 'D_T.png', 'desc' : 'Boat'}, {'src': 'F_T.png', 'desc' : 'Flush'},
+        {'src': 'G_T.png', 'desc' : 'Straight'}, {'src': 'H_T.png', 'desc' : 'Set'},
+        {'src': 'J_T.png', 'desc' : 'Two Pair'}, {'src': 'K_T.png', 'desc' : 'Pair'}];
+        $scope.startGame();
+        $scope.keyEventReady = true;          
     }
 
     $scope.startGame = function(){
-        $scope.hands = ['STRAIGHT', 'FLUSH', 'POO'];
+        $scope.hands = [{'type' : 'STRAIGHTFLUSH', 'color' : 'secondary'}, {'type' :'FOUR OF A KIND', 'color' : 'secondary'},
+        {'type' : 'BOAT', 'color' : 'secondary'}, {'type' : 'FLUSH', 'color' : 'secondary'},
+        {'type' : 'STRAIGHT', 'color' : 'secondary'}, {'type' : 'SET', 'color' : 'secondary'},
+        {'type' : 'TWOPAIR', 'color' : 'secondary'}, {'type' : 'PAIR', 'color' : 'secondary'}];
+
+        $scope.potentialHands = {'STRAIGHTFLUSH' : false, 'FOUROFAKIND' : false, 
+        'BOAT' : false, 'FLUSH' : false,'STRAIGHT' : false, 'SET' : false,'TWOPAIR' : false, 'PAIR' : false};
+        $scope.keyEventReady = false; 
         $scope.board = [];
         $scope.flop = [];
         $scope.turn = {};
@@ -35,10 +39,130 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
             });
     }        
 
+    var potHands = function(hand){
+        switch(hand.handType){
+            case 0:
+                break;
+            case 1:
+                $scope.potentialHands.PAIR = true;
+                break;
+            case 2:
+                $scope.potentialHands.TWOPAIR = true;
+                break;
+            case 3:
+                $scope.potentialHands.SET = true;
+                break;
+            case 4:
+                $scope.potentialHands.STRAIGHT = true;
+                break;
+            case 5:
+                $scope.potentialHands.FLUSH = true;
+                break;
+            case 6:
+                $scope.potentialHands.BOAT = true;
+                break;
+            case 7:
+                $scope.potentialHands.FOUROFAKIND = true;
+                break;
+            case 8:
+                $scope.potentialHands.STRAIGHTFLUSH = true;
+                break;
+            default: 
+                break;             
+        }        
+    }
+
     var identifyHand = function(hand){
         //Use service hand to identify hand. 
     }
 
+    $document.bind('keydown', function (e) {
+     $scope.keyEvent (e.keyCode)
+    });
+
+    $scope.keyEvent = function(keyCode){        
+        if($scope.keyEventReady){
+            console.log($scope.hands);
+            console.log(keyCode);
+            switch(keyCode){
+                case 65:
+                    if($scope.potentialHands.STRAIGHTFLUSH){
+                        $scope.hands[0].color = 'success';
+                    }
+                    else{                        
+                         $scope.hands[0].color = 'danger';
+                    }
+                    console.log("a");
+                    break;
+                case 83:                    
+                    if($scope.potentialHands.FOUROFAKIND){
+                        $scope.hands[1].color = 'success';
+                    }
+                    else{
+                        $scope.hands[1].color = 'danger';
+                    }                    
+                    console.log("s");
+                    break;    
+                case 68:
+                    if($scope.potentialHands.BOAT){
+                        $scope.hands[2].color = 'success';
+                    }
+                    else{
+                        $scope.hands[2].color = 'danger';
+                    }                    
+                    console.log("d");
+                    break;
+                case 70:
+                    if($scope.potentialHands.FLUSH){
+                        $scope.hands[3].color = 'success';
+                    }
+                    else{
+                        $scope.hands[3].color = 'danger';
+                    }                    
+                    console.log("f");
+                    break;
+                case 71:
+                    if($scope.potentialHands.STRAIGHT){
+                        $scope.hands[4].color = 'success';
+                    }
+                    else{
+                        $scope.hands[4].color = 'danger';
+                    }                    
+                    console.log("g");
+                    break;
+                case 72:
+                    if($scope.potentialHands.SET){
+                        $scope.hands[5].color = 'success';
+                    }
+                    else{
+                        $scope.hands[5].color = 'danger';
+                    }                    
+                    console.log("h");
+                    break;
+                case 74:
+                    if($scope.potentialHands.TWOPAIR){
+                        $scope.hands[6].color = 'success';
+                    }
+                    else{
+                        $scope.hands[6].color = 'danger';
+                    }
+                    console.log("j");
+                case 75:
+                    if($scope.potentialHands.PAIR){
+                        $scope.hands[7].color = 'success';
+                    }
+                    else{
+                        $scope.hands[7].color = 'danger';
+                    }                    
+                    console.log("k");
+                    break;
+                default:
+                    break;
+            }
+            console.log($scope.hands[0].color, $scope.hands[1].color, $scope.hands[2].color,$scope.hands[3].color, $scope.hands[4].color, $scope.hands[5].color,$scope.hands[6].color,$scope.hands[7].color);
+            //updateColors();
+        }
+    }
 
     //Call identifyHand on each combination to filter out useless hands from $scope.allHands.
     var findRange = function(gameType){           
@@ -99,6 +223,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         //3 board + 2 holding                        
                         let addedArray = addArrayService.add(a,b);  
                         let createdHand = hand.getHandType(addedArray);
+                        potHands(createdHand);
+                        console.log("createdHand:" + createdHand.handType.toString());
                         allHands.push(addedArray); 
                     }
                 }                
@@ -115,6 +241,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                             //1 deck + 2 board + 2 holding
                             let addedArray = addArrayService.add($scope.deck[a],b,c);  
                             let createdHand = hand.getHandType(addedArray);
+                            console.log("createdHand:" + createdHand.handType.toString());
+                            potHands(createdHand);
                             allHands.push(addedArray); 
                         }
                     }
@@ -127,6 +255,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                             //1 deck + 3 board + 1 holding
                             let addedArray = addArrayService.add($scope.deck[a],b, $scope.holding[c]);  
                             let createdHand = hand.getHandType(addedArray);
+                            potHands(createdHand);
+                            console.log("createdHand:" + createdHand.handType.toString());
                             allHands.push(addedArray); 
                         }
                     }    
@@ -143,6 +273,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         //2 deck + 3 board
                         let addedArray = addArrayService.add(a,b);  
                         let createdHand = hand.getHandType(addedArray);
+                        potHands(createdHand);
+                        console.log("createdHand:" + createdHand.handType.toString());
                         allHands.push(addedArray);              
                     } 
 
@@ -154,6 +286,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                             //2 deck + 2 board + 1 holding
                             let addedArray = addArrayService.add(a,b,$scope.holding[c]);  
                             let createdHand = hand.getHandType(addedArray);
+                            potHands(createdHand);
+                            console.log("createdHand:" + createdHand.handType.toString());
                             allHands.push(addedArray); 
                         }
                     }
@@ -166,6 +300,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                             //2 deck + 1 board + 2 holding
                             let addedArray = addArrayService.add(a,$scope.board[b],c);  
                             let createdHand = hand.getHandType(addedArray);
+                            potHands(createdHand);
+                            console.log("createdHand:" + createdHand.handType.toString());
                             allHands.push(addedArray); 
                         }  
                     }
@@ -214,7 +350,9 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         //3 board + 2 holding
                         let addedArray = addArrayService.add(a,b);  
                         let createdHand = hand.getHandType(addedArray);
+                        potHands(createdHand);
                         allHands.push(addedArray); 
+                        console.log("createdHand:" + createdHand.handType.toString());
                     }
                 }  
 
@@ -226,7 +364,9 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         //4 board + 1 holding
                         let addedArray = addArrayService.add(a,$scope.holding[b]);  
                         let createdHand = hand.getHandType(addedArray);
-                        allHands.push(addedArray); 
+                        potHands(createdHand);
+                        allHands.push(addedArray);
+                        console.log("createdHand:" + createdHand.handType.toString()); 
                     }
                 }  
 
@@ -238,6 +378,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         //1 deck + 4 board
                         let addedArray = addArrayService.add($scope.deck[a],b);  
                         let createdHand = hand.getHandType(addedArray);
+                        console.log("createdHand:" + createdHand.handType.toString());
+                        potHands(createdHand);
                         allHands.push(addedArray);                        
                     }
 
@@ -249,6 +391,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                             //1 deck + 3 board + 1 holding                            
                             let addedArray = addArrayService.add($scope.deck[a],b,$scope.holding[c]);  
                             let createdHand = hand.getHandType(addedArray);
+                            console.log("createdHand:" + createdHand.handType.toString());
+                            potHands(createdHand);
                             allHands.push(addedArray);                             
                         }                    
                     }
@@ -262,6 +406,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                             //1 deck + 2 board + 2 holding
                             let addedArray = addArrayService.add($scope.deck[a],b,c);  
                             let createdHand = hand.getHandType(addedArray);
+                            console.log("createdHand:" + createdHand.handType.toString());
+                            potHands(createdHand);
                             allHands.push(addedArray);                             
                         }                        
                     }
@@ -296,7 +442,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     for(var i = 0 ; i < $scope.holding.length; i++){                                           
                         let addedArray = addArrayService.add(a,$scope.holding[i]);  
                         let createdHand = hand.getHandType(addedArray);    
-                        console.log("createdHand:" + createdHand.toString());
+                        console.log("createdHand:" + createdHand.handType.toString());
+                        potHands(createdHand);
                         //4 board + 1 holding
                         allHands.push(addedArray);
                     }
@@ -309,10 +456,10 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     //Take 2 of holding
                     let twoOfHolding = Combinatorics.combination($scope.holding, 2)
                     while(b = twoOfHolding.next()){                        
-                        let addedArray = addArrayService.add(a,b);
-                        console.log(addedArray.toString());
+                        let addedArray = addArrayService.add(a,b);                        
                         let createdHand = hand.getHandType(addedArray);    
-                        console.log("createdHand:" + createdHand.toString());
+                        console.log("createdHand:" + createdHand.handType.toString());
+                        potHands(createdHand);
                         //3 board + 2 holding
                         allHands.push(addedArray);
                     }
@@ -320,21 +467,9 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
             }
 
             console.log(allHands.length);
+            console.log($scope.potentialHands);
             $scope.allHands = allHands;       
     }
-
-
-    // var handType = {
-    //     "TOPCARD" : 0,
-    //     "PAIR" : 1,
-    //     "TWOPAIR" : 2,
-    //     "SET" : 3,
-    //     "STRAIGHT" : 4,
-    //     "FULLHOUSE" : 5,
-    //     "FLUSH" : 6,
-    //     "QUADS" : 7,
-    //     "STRAIGHTFLUSH" : 8
-    // }
  
     //Adds new card to board - turn or river.
     $scope.newCard = function(){
@@ -344,6 +479,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
         $scope.remaining = newCardPos;
         $scope.gameCards.push(newCard);
         $scope.board.push(newCard);
+        $scope.potentialHands = {'STRAIGHTFLUSH' : false, 'FOUROFAKIND' : false, 
+        'BOAT' : false, 'FLUSH' : false,'STRAIGHT' : false, 'SET' : false,'TWOPAIR' : false, 'PAIR' : false};
 
         if(gameType==3){               
             $scope.turn = newCard;
@@ -373,6 +510,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
         $scope.flop = $scope.gameCards.slice(0,3);
         $scope.turn = $scope.gameCards[3];
         $scope.holding = $scope.gameCards.slice(4,6);
+        $scope.potentialHands = {'STRAIGHTFLUSH' : false, 'FOUROFAKIND' : false, 
+        'BOAT' : false, 'FLUSH' : false,'STRAIGHT' : false, 'SET' : false,'TWOPAIR' : false, 'PAIR' : false};
         findRange('Turn');
     //     makeHands(rndEnemies);
     //     doFlop();
@@ -385,6 +524,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
         $scope.turn = $scope.gameCards[3];
         $scope.river = $scope.gameCards[4];
         $scope.holding = $scope.gameCards.slice(5,7);
+
         findRange('River'); 
     //     makeHands(rndEnemies);
     //     doFlop();
@@ -403,7 +543,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
         $scope.gameCards = $scope.deck.slice($scope.remaining)
         switch(rndIndex){
             case 0:
-                flopGame(rndEnemies);                
+                turnGame(rndEnemies);                
                 break;
             case 1:                 
                 turnGame(rndEnemies);                

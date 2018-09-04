@@ -7,8 +7,8 @@ app.service('hand', ['$filter', function($filter){
 	"TWOPAIR" : 2,
 	"SET" : 3,
 	"STRAIGHT" : 4,
-	"FULLHOUSE" : 5,
-	"FLUSH" : 6,
+	"FLUSH": 5,
+	"FULLHOUSE" : 6,
 	"QUADS" : 7,
 	"STRAIGHTFLUSH" : 8
 	}
@@ -52,8 +52,7 @@ app.service('hand', ['$filter', function($filter){
 
 	//Fix for wheel (ACE,2,3,4,5)
 	var isStraight = function(hand){
-		var result = true;
-		console.log("In isStraight() and about to calc sortedHand:[" + hand[0].value + ", " + hand[1].value + ", " + hand[2].value + ", " + hand[3].value + ", "  + hand[4].value + "]");
+		var result = true;		
 		//let sortedHand = $filter('orderBy')(hand, function(hand){return hand.value});
 		//let sortedHand = $filter('orderBy')(hand, 'value');
 		let sortedHand = hand.sort(function(a, b) { return a.value - b.value;});
@@ -134,18 +133,18 @@ app.service('hand', ['$filter', function($filter){
 			}
         }
         //FIX FIX FIX FIX FIX FIX "card()"
-		if(result){
-			for (var k = 0; k < 5; k++) {
-				if(this.hand[k].value==setCard){
-					this.handCards.push(new card(hand[k].suit, setCard))
-				}
-			}
-			for (var l = 0; l < 5; l++) {	
-				if(this.hand[l].value==pairCard){
-					this.handCards.push(new card(hand[l].suit, pairCard))
-				}				
-			}
-		}		
+		//if(result){
+			//for (var k = 0; k < 5; k++) {
+				//if(this.hand[k].value==setCard){
+					//this.handCards.push(new card(hand[k].suit, setCard))
+				//}
+			//}
+			//for (var l = 0; l < 5; l++) {	
+				//if(this.hand[l].value==pairCard){
+					//this.handCards.push(new card(hand[l].suit, pairCard))
+				//}				
+			//}
+		//}		
 		return result;
 	}
 
@@ -164,7 +163,7 @@ app.service('hand', ['$filter', function($filter){
         //FIX FIX FIX FIX "card()"
 		for (var j = 0; j < 5; j++) {
 			if(hand[j].value==pairCard){
-				this.handCards.push(new card(hand[j].suits, pairCard));
+				//this.handCards.push(new card(hand[j].suits, pairCard));
 			}
 		}	
 		return result;
@@ -184,15 +183,16 @@ app.service('hand', ['$filter', function($filter){
         //FIX FIX FIX FIX "card()"
 		for (var j = 0; j < 5; j++) {
 			if(hand[j].value==setCard){
-				this.handCards.push(new card(hand[j].suits, setCard));
+				//this.handCards.push(new card(hand[j].suits, setCard));
 			}
 		}	
 		return result;
 	}
 
 	var isTopCard = function(hand){
-		var sortedHand = $filter('orderBy')(hand.value); // index 0 lowest, index 4 highest
-		this.handCards.push(sortedHand);
+		//var sortedHand = $filter('orderBy')(hand.value); // index 0 lowest, index 4 highest
+		let sortedHand = hand.sort(function(a, b) { return a.value - b.value;});
+		//this.handCards.push(sortedHand[4]);
 		return true;
 	}
 
@@ -207,8 +207,7 @@ app.service('hand', ['$filter', function($filter){
 		return result;
 	}
 
-	var whatHand = function(hand){
-		console.log("whatHand, hand.length = " + hand.length.toString());
+	var whatHand = function(hand){		
         let _handType = null;
 		if(hand.length!=5){
 			_handType = null;
@@ -231,9 +230,9 @@ app.service('hand', ['$filter', function($filter){
 		else if(isSet(hand)){
 			_handType = handType.SET;
 		}
-		else if(isTwoPair(hand)){
-			_handType = handType.TWOPAIR;
-		}
+		//else if(isTwoPair(hand)){
+		//	_handType = handType.TWOPAIR;
+		//}
 		else if(isPair(hand)){
 			_handType = handType.PAIR;
 		}		
