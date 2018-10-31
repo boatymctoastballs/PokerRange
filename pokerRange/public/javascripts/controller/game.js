@@ -1,7 +1,8 @@
 app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArrayService', '$document', function($scope, $rootScope, $http, card, hand, addArrayService, $document){
-
     //https://deckofcardsapi.com/ 
       $scope.init = function(){
+        $scope.keyEventReady = false;
+        $scope.colorContainer = []; 
         $scope.keys = [{'src': 'A_T.png', 'desc' : 'Straight Flush'}, {'src': 'S_T.png', 'desc' : 'Four Of A Kind'},
         {'src': 'D_T.png', 'desc' : 'Boat'}, {'src': 'F_T.png', 'desc' : 'Flush'},
         {'src': 'G_T.png', 'desc' : 'Straight'}, {'src': 'H_T.png', 'desc' : 'Set'},
@@ -17,8 +18,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
         {'type' : 'TWOPAIR', 'color' : 'secondary'}, {'type' : 'PAIR', 'color' : 'secondary'}];
 
         $scope.potentialHands = {'STRAIGHTFLUSH' : false, 'FOUROFAKIND' : false, 
-        'BOAT' : false, 'FLUSH' : false,'STRAIGHT' : false, 'SET' : false,'TWOPAIR' : false, 'PAIR' : false};
-        $scope.keyEventReady = false; 
+        'BOAT' : false, 'FLUSH' : false,'STRAIGHT' : false, 'SET' : false,'TWOPAIR' : false, 'PAIR' : false};        
         $scope.board = [];
         $scope.flop = [];
         $scope.turn = {};
@@ -81,10 +81,10 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
     });
 
     $scope.keyEvent = function(keyCode){        
-        if($scope.keyEventReady){
+        //if($scope.keyEventReady){
             console.log($scope.hands);
             console.log(keyCode);
-            switch(keyCode){
+            switch(keyCode){ 
                 case 65:
                     if($scope.potentialHands.STRAIGHTFLUSH){
                         $scope.hands[0].color = 'success';
@@ -146,6 +146,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     else{
                         $scope.hands[6].color = 'danger';
                     }
+                    break;
                     console.log("j");
                 case 75:
                     if($scope.potentialHands.PAIR){
@@ -159,9 +160,9 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                 default:
                     break;
             }
-            console.log($scope.hands[0].color, $scope.hands[1].color, $scope.hands[2].color,$scope.hands[3].color, $scope.hands[4].color, $scope.hands[5].color,$scope.hands[6].color,$scope.hands[7].color);
+            console.log($scope.hands[0].color, $scope.hands[1].color, $scope.hands[2].color,$scope.hands[3].color, $scope.hands[4].color, $scope.hands[5].color, $scope.hands[6].color, $scope.hands[7].color);
             //updateColors();
-        }
+        //}
     }
 
     //Call identifyHand on each combination to filter out useless hands from $scope.allHands.
@@ -224,7 +225,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         let addedArray = addArrayService.add(a,b);  
                         let createdHand = hand.getHandType(addedArray);
                         potHands(createdHand);
-                        console.log("createdHand:" + createdHand.handType.toString());
+                        console.log("createdHand: " + createdHand.handType.toString());
                         allHands.push(addedArray); 
                     }
                 }                
@@ -479,8 +480,8 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
         $scope.remaining = newCardPos;
         $scope.gameCards.push(newCard);
         $scope.board.push(newCard);
-        $scope.potentialHands = {'STRAIGHTFLUSH' : false, 'FOUROFAKIND' : false, 
-        'BOAT' : false, 'FLUSH' : false,'STRAIGHT' : false, 'SET' : false,'TWOPAIR' : false, 'PAIR' : false};
+        //$scope.potentialHands = {'STRAIGHTFLUSH' : false, 'FOUROFAKIND' : false, 
+        //'BOAT' : false, 'FLUSH' : false,'STRAIGHT' : false, 'SET' : false,'TWOPAIR' : false, 'PAIR' : false};
 
         if(gameType==3){               
             $scope.turn = newCard;
