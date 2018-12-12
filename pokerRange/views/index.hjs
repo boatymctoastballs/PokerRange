@@ -40,8 +40,10 @@
 
 <!--Services-->
 <script type="text/javascript" src="/javascripts/service/hand.js"></script>
-<script type="text/javascript" src="/javascripts/service/addArray.js"></script>    
+<script type="text/javascript" src="/javascripts/service/addArray.js"></script>  
+
 <!--Directives-->  
+<script type="text/javascript" src="/javascripts/directives/handlistitem.js"></script> 
 
 <!--Factories-->  
 <script type="text/javascript" src="/javascripts/factory/card.js"></script>

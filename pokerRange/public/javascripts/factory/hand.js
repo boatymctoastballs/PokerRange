@@ -143,6 +143,7 @@ app.factory('hand', ['card', '$filter', function(card, $filter){
 		return result;
 	}
 
+	//Change to high pair
 	var isPair = function(){
 		var pairCard = null;
 		var pairSuits = [];

@@ -4,9 +4,9 @@
     <div class="row">
         <div class="col- mr-4 ">
             <ul class="list-group">                
-                <li class="list-group-item list-group-item-secondary" ng-repeat="hand in hands">{{hand.type}}
-                <span class="badge badge-hand.color">New</span> {{$index}} <span ng-bind="hand.color"></span>
-                </li>       
+                <div class="list-group-item" ng-repeat="hand in hands">
+                    <hand-list-item hand="hand"></hand-list-item>                    
+                </div>       
             </ul>      
         </div>
 

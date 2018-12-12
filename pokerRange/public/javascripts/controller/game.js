@@ -90,7 +90,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                         $scope.hands[0].color = 'success';
                     }
                     else{                        
-                         $scope.hands[0].color = 'danger';
+                        $scope.hands[0].color = 'danger';
                     }
                     console.log("a");
                     break;
@@ -161,7 +161,6 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     break;
             }
             console.log($scope.hands[0].color, $scope.hands[1].color, $scope.hands[2].color,$scope.hands[3].color, $scope.hands[4].color, $scope.hands[5].color, $scope.hands[6].color, $scope.hands[7].color);
-            //updateColors();
         //}
     }
 
@@ -222,8 +221,7 @@ app.controller('game', ['$scope', '$rootScope', '$http', 'card', 'hand', 'addArr
                     let twoOfHolding = Combinatorics.combination($scope.holding, 2)
                     while(b = twoOfHolding.next()){
                         //3 board + 2 holding                        
-                        let addedArray = addArrayService.add(a,b);  
-                        let createdHand = hand.getHandType(addedArray);
+                        let addedArray;
                         potHands(createdHand);
                         console.log("createdHand: " + createdHand.handType.toString());
                         allHands.push(addedArray); 
